@@ -1,44 +1,81 @@
 
-//Import de la libreria de HTTPS
-const https = require('https');
+//ImportdelalibreriadeHTTPS
+consthttps=require('https');
 
 /**
- * Servicios para recuperar datos
- * 
- */
-//================== BTO ===============
+*Serviciospararecuperardatos
+*
+*/
+//==================BTO===============
 
-const URL = "https://hackaton.gruposicoss.com.mx/APIEnLinea/WSEnlinea.ashx?";
+
+function getUrl(url, callback){
+    let req = https.get(url, (res) => {
+        res.on('data',(response) => {
+            let result = JSON.parse(response);
+            callback(result);
+        }
+    });
+}
+
+
+constURL="https://hackaton.gruposicoss.com.mx/APIEnLinea/WSEnlinea.ashx?";
 
 /**
- *  cuantas inasistencias han tenido los empleados en la ultima quincena
- */
+*cuantasinasistenciashantenidolosempleadosenlaultimaquincena
+*/
 
- function getInasistenciasForm(){
-    const QS = "accion=NLIncapacidades&r_FechaInicio=01/01/2016-31/03/2016";
-    
-    requestUrl(URL + QS);
- }
+functiongetInasistenciasFrom(inicio,fin){
+constQS="accion=NLFaltas&r_Fecha="+inicio+"-"+fin;
+url=URL+QS;
+https.get(url,(res)=>{
+console.log('statusCode:',res.statusCode);
+console.log('headers:',res.headers);
+
+res.on('data',(d)=>{
+//process.stdout.write(d);
+varjson=JSON.parse(d);
+//for(vari=0;i<json.length;i++){
+//console.log(json[i].departamento);
+//
+console.log("Numerodeinasistenciasdelperiodo...:"+json.length);
+});
+
+}).on('error',(e)=>{
+console.error(e);
+});
+}
 
 
- //================== IVAN ===============
+functiongetIncapacidadadesFrom(inicio,fin){
+constQS="accion=NLIncapacidades&r_FechaInicio="+inicio+"-"+fin;
+url=URL+QS;
+https.get(url,(res)=>{
+console.log('statusCode:',res.statusCode);
+console.log('headers:',res.headers);
+
+res.on('data',(d)=>{
+//process.stdout.write(d);
+varjson=JSON.parse(d);
+//for(vari=0;i<json.length;i++){
+//console.log(json[i].departamento);
+//
+console.log("Numerodeinasistenciasdelperiodo...:"+json.length);
+});
+
+}).on('error',(e)=>{
+console.error(e);
+});
+}
 
 
- //============ UTILIDADES ==============
+//==================IVAN===============
 
 
- function requestUrl(url){
-    https.get(url, (res) => {
-    console.log('statusCode:', res.statusCode);
-    console.log('headers:', res.headers);
+//============UTILIDADES==============
 
-    res.on('data', (d) => {
-        process.stdout.write(d);
-    });
 
-    }).on('error', (e) => {
-        console.error(e);
-    });
- }
- 
- getInasistenciasForm();
+
+
+getInasistenciasFrom("01/01/2016","20/02/2016");
+//getIncapacidadadesFrom("01/01/2016","20/02/2016");
