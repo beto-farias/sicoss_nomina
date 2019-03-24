@@ -14,7 +14,7 @@ function getUrl(url, callback){
         res.on('data',(response) => {
             let result = JSON.parse(response);
             callback(result);
-        }
+        });
     });
 }
 
